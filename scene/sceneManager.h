@@ -14,7 +14,9 @@ typedef enum SceneType
     Nest_L,
     Road_L,
     Kitchen_L,
-    Boss_Fight_L
+    Boss_Fight_L,
+    Game_Over_L,   
+    Game_Finish_L  
 } SceneType;
 extern SceneType last_scene;
 void create_scene(SceneType);

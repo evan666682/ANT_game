@@ -5,6 +5,8 @@
 #include "nest.h"
 #include "kitchen.h"
 #include "boss_fight.h"
+#include "gameover.h"   
+#include "gamefinish.h" 
 
 Scene *scene = NULL;
 
@@ -32,6 +34,12 @@ void create_scene(SceneType type)
         break;
     case Boss_Fight_L:
         scene = New_Boss_Fight(Boss_Fight_L);
+        break;
+    case Game_Over_L:  
+        scene = New_Game_Over(Game_Over_L);
+        break;
+    case Game_Finish_L: 
+        scene = New_Game_Finish(Game_Finish_L);
         break;
     default:
         break;

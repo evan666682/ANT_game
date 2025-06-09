@@ -155,11 +155,23 @@ bool game_update(Game *self)
     double now = al_get_time();
     double delta = now - last_time;
     last_time = now;
-    Update_Game_Clock(&game_clock, delta);
+    
 
-    if(game_clock.day != last_day){
-        last_day = game_clock.day;
-        Update_Resources(&resources);
+    //只有螞蟻收集部分才會更新時間
+    if (scene->label == Nest_L || scene->label == Road_L || scene->label == Kitchen_L) {
+        
+        Update_Game_Clock(&game_clock, delta);
+
+        // 檢查是否超過3天
+        if (game_clock.day > 3) {
+            self->should_change_scene = true;
+            self->next_scene_type = Game_Over_L;
+        }
+
+        if(game_clock.day != last_day){
+            last_day = game_clock.day;
+            Update_Resources(&resources);
+        }
     }
     scene->Update(scene);
 
@@ -179,6 +191,11 @@ bool game_update(Game *self)
     }
     
     if (self->should_change_scene) {
+
+        if (self->next_scene_type == GAME_TERMINATE) {
+            return false; // 終止遊戲主循環
+        }
+
         if (scene->Destroy)
             scene->Destroy(scene);
         create_scene(self->next_scene_type);
