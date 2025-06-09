@@ -1,0 +1,114 @@
+{
+	"folders": [
+		{
+			"name": "程式設計一",
+			"path": "../../程式設計一"
+		},
+		{
+			"name": "資訊結構導論",
+			"path": "../../資訊結構導論"
+		},
+		{
+			"name": "CPE",
+			"path": "../../../C++/CPE"
+		},
+		{
+			"name": "JMJudge",
+			"path": "../../../C++/JMJudge"
+		},
+		{
+			"name": "Leetcode",
+			"path": "../../../C++/Leetcode"
+		},
+		{
+			"name": "資料結構",
+			"path": "../../資料結構"
+		},
+		{
+			"name": "Python",
+			"path": "../../../Python"
+		},
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"ostream": "cpp",
+			"iostream": "cpp",
+			"algorithm": "cpp",
+			"stdlib.h": "c",
+			"stdio.h": "c",
+			"new": "cpp",
+			"chrono": "cpp",
+			"valarray": "cpp",
+			"vector": "cpp",
+			"random": "c",
+			"array": "cpp",
+			"bitset": "cpp",
+			"string_view": "cpp",
+			"initializer_list": "cpp",
+			"regex": "cpp",
+			"utility": "cpp",
+			"*.tcc": "cpp",
+			"atomic": "cpp",
+			"cctype": "cpp",
+			"cfenv": "cpp",
+			"charconv": "cpp",
+			"cinttypes": "cpp",
+			"clocale": "cpp",
+			"cmath": "cpp",
+			"codecvt": "cpp",
+			"complex": "cpp",
+			"condition_variable": "cpp",
+			"csetjmp": "cpp",
+			"csignal": "cpp",
+			"cstdarg": "cpp",
+			"cstddef": "cpp",
+			"cstdint": "cpp",
+			"cstdio": "cpp",
+			"cstdlib": "cpp",
+			"cstring": "cpp",
+			"ctime": "cpp",
+			"cuchar": "cpp",
+			"cwchar": "cpp",
+			"cwctype": "cpp",
+			"deque": "cpp",
+			"forward_list": "cpp",
+			"list": "cpp",
+			"unordered_map": "cpp",
+			"unordered_set": "cpp",
+			"exception": "cpp",
+			"functional": "cpp",
+			"iterator": "cpp",
+			"map": "cpp",
+			"memory": "cpp",
+			"memory_resource": "cpp",
+			"numeric": "cpp",
+			"optional": "cpp",
+			"ratio": "cpp",
+			"set": "cpp",
+			"string": "cpp",
+			"system_error": "cpp",
+			"tuple": "cpp",
+			"type_traits": "cpp",
+			"fstream": "cpp",
+			"future": "cpp",
+			"iomanip": "cpp",
+			"iosfwd": "cpp",
+			"istream": "cpp",
+			"limits": "cpp",
+			"mutex": "cpp",
+			"scoped_allocator": "cpp",
+			"shared_mutex": "cpp",
+			"sstream": "cpp",
+			"stdexcept": "cpp",
+			"streambuf": "cpp",
+			"thread": "cpp",
+			"typeindex": "cpp",
+			"typeinfo": "cpp",
+			"stack": "cpp",
+			"string.h": "c"
+		}
+	}
+}
