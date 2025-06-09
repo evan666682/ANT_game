@@ -61,7 +61,7 @@ void Food_update(Elements *self) {
     if (char_vec.len > 0) {
         Elements *char_ele = char_vec.arr[0];
         Character *character = (Character *)(char_ele->pDerivedObj);
-        if (check_collision(food->hitbox, character->hitbox)) {
+        if  (food->hitbox->overlap(food->hitbox, character->hitbox)) {
             colliding = true;
         }
     }

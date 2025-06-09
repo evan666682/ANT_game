@@ -26,7 +26,7 @@ Scene *New_Nest(int label)
     
     Elements *floor = New_Floor(Floor_L, "assets/map/nest_map.txt");
     Elements *ele = New_Character(Character_L);
-    Elements *food1 = New_Food(Food_L, 300, 100,pObj->label);//增加食物
+    Elements *food1 = New_Food(Food_L, 350, 145,pObj->label);//增加食物
     Elements *food2 = New_Food(Food_L, 400, 100,pObj->label);//增加食物
     // register element
     _Register_elements(pObj, floor);
