@@ -8,7 +8,7 @@
 #include "collision.h"             //  <-- 新增 (為了 check_collision)
 
 
-Elements *New_Food(int label, int x, int y) {
+Elements *New_Food(int label, int x, int y,int scene_label) {
     Food *pDerivedObj = (Food *)malloc(sizeof(Food));
     Elements *pObj = New_Elements(label);
 
@@ -24,10 +24,10 @@ Elements *New_Food(int label, int x, int y) {
     pDerivedObj->y = y;
     pDerivedObj->hitbox = New_Rectangle(x, y, x + pDerivedObj->width, y + pDerivedObj->height);
 
-    pDerivedObj->is_collected = false;
-    pDerivedObj->day_collected = -1;
+    pDerivedObj->is_collected = food_states[scene_label].is_collected;
+    pDerivedObj->day_collected = food_states[scene_label].day_collected;
     pDerivedObj->collection_progress = 0;
-    pDerivedObj->character_is_colliding = false;
+    // pDerivedObj->character_is_colliding = false;
     
     pObj->pDerivedObj = pDerivedObj;
     pObj->inter_obj[pObj->inter_len++] = Character_L;
@@ -47,6 +47,8 @@ void Food_update(Elements *self) {
     if (food->is_collected && game_clock.day > food->day_collected) {
         food->is_collected = false;
         food->day_collected = -1;
+
+        food_states[scene->label] = (FoodState){.is_collected = false, .day_collected = -1};
     }
 
     if (food->is_collected) {
@@ -54,14 +56,26 @@ void Food_update(Elements *self) {
     }
 
     // Collection logic
-    if (food->character_is_colliding) {
+     ElementVec char_vec = _Get_label_elements(scene, Character_L);
+    bool colliding = false;
+    if (char_vec.len > 0) {
+        Elements *char_ele = char_vec.arr[0];
+        Character *character = (Character *)(char_ele->pDerivedObj);
+        if (check_collision(food->hitbox, character->hitbox)) {
+            colliding = true;
+        }
+    }
+
+    if (colliding) {
         if (key_state[ALLEGRO_KEY_F]) {
             food->collection_progress += COLLECTION_RATE;
             if (food->collection_progress >= MAX_COLLECTION_PROGRESS) {
-                resources.food += resources.ants;
+                resources.food += 2 * resources.ants;
                 food->is_collected = true;
                 food->day_collected = game_clock.day;
                 food->collection_progress = 0;
+
+                food_states[scene->label] = (FoodState){.is_collected = true, .day_collected = game_clock.day};
             }
         } else {
             food->collection_progress = 0; // Reset progress if F is not held
@@ -69,25 +83,23 @@ void Food_update(Elements *self) {
     } else {
         food->collection_progress = 0; // Reset progress if not colliding
     }
-    
-    // Reset collision flag for the next frame
-    food->character_is_colliding = false;
 }
 
 void Food_interact(Elements *self) {
-    Food *food = (Food *)(self->pDerivedObj);
+    // Food *food = (Food *)(self->pDerivedObj);
 
-    if (food->is_collected) return;
+    // if (food->is_collected) return;
 
-    ElementVec char_vec = _Get_label_elements(scene, Character_L);
-    if (char_vec.len > 0) {
-        Elements *char_ele = char_vec.arr[0];
-        Character *character = (Character *)(char_ele->pDerivedObj);
+    // ElementVec char_vec = _Get_label_elements(scene, Character_L);
+    // if (char_vec.len > 0) {
+    //     Elements *char_ele = char_vec.arr[0];
+    //     Character *character = (Character *)(char_ele->pDerivedObj);
         
-        if (check_collision(food->hitbox, character->hitbox)) {
-            food->character_is_colliding = true;
-        }
-    }
+    //     if (check_collision(food->hitbox, character->hitbox)) {
+    //         food->character_is_colliding = true;
+    //     }
+    // }
+    return;
 }
 
 void Food_draw(Elements *self) {

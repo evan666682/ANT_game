@@ -25,7 +25,7 @@ Scene *New_Kitchen(int label)
     
     Elements *floor = New_Floor(Floor_L, "assets/map/kitchen_map.txt");
     Elements *ele = New_Character(Character_L);
-    Elements *food = New_Food(Food_L, 400, 240);//增加食物
+    Elements *food = New_Food(Food_L, 300, 240,pObj->label);//增加食物
     // register element
     _Register_elements(pObj, floor);
     _Register_elements(pObj, ele);

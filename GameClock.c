@@ -13,7 +13,7 @@ void Init_Game_Clock(GameClock *clock){
 }
 
 void Update_Game_Clock(GameClock *clock, double delta){
-    double game_minute = delta * (540 / 300);
+    double game_minute = delta * (10800 / 300);
 
     clock->timer_accum += game_minute;
 
@@ -34,7 +34,7 @@ void Update_Game_Clock(GameClock *clock, double delta){
 }
 
 void Clock_Draw(GameClock *clock, int x, int y){
-    char buf[32];
+    char buf[64];
     snprintf(buf, sizeof(buf), "Day %d %02d:%02d", clock->day, clock->hour, clock->min);
     al_draw_text(count_font, al_map_rgb(255, 255, 255), x, y, 0, buf);
 }

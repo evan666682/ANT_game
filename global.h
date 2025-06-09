@@ -17,6 +17,17 @@
 #define MAX_ELEMENT 100
 #define min(x, y) ((x) > (y) ? (y) : (x))
 #define max(x, y) ((x) < (y) ? (y) : (x))
+
+// Add near other typedefs or structs
+typedef struct {
+    bool is_collected;
+    int day_collected;
+} FoodState;
+
+// Add with other extern declarations
+extern FoodState food_states[5]; // 5 scenes: Menu, Nest, Road, Kitchen, Boss_Fight
+
+
 // note that you can't assign initial value for extern variable!
 extern const double FPS;
 extern const int WIDTH;

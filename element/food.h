@@ -15,10 +15,10 @@ typedef struct _Food {
     bool is_collected;
     int day_collected;
     double collection_progress; 
-    bool character_is_colliding;
+    // bool character_is_colliding;
 } Food;
 
-Elements *New_Food(int label, int x, int y);
+Elements *New_Food(int label, int x, int y, int scene_label);
 void Food_update(Elements *self);
 void Food_draw(Elements *self);
 void Food_destroy(Elements *self);

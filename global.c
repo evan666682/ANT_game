@@ -8,6 +8,16 @@ const int GAME_HEIGHT = 1080;
 const int WIDTH = 640;
 const int HEIGHT = 360;
 int window = 0;
+
+// Add with other global variable definitions
+FoodState food_states[5] = {
+    {true, -1}, // Menu_L (no food)
+    {false, -1}, // Nest_L
+    {false, -1}, // Road_L
+    {false, -1}, // Kitchen_L
+    {true, -1}  // Boss_Fight_L (no food)
+};
+
 ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 ALLEGRO_EVENT event;
 ALLEGRO_TIMER *fps = NULL;

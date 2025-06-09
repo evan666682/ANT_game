@@ -64,58 +64,42 @@ Elements *New_Character(int label)
 }
 void Character_update(Elements *self)
 {
-
-    // use the idea of finite state machine to deal with different state
     Character *chara = ((Character *)(self->pDerivedObj));
-    
+
     Character_interact(self);
-    if(chara->climbing == true){
-        //Climbing isn't finished yet
-    }else if(chara->on_ground == false && chara->climbing == false){
+
+    if (chara->climbing) {
+        // 暫不處理攀爬時的額外物理計算
+    } else if (!chara->on_ground) {
         chara->gravity += 1;
         _Character_update_position(self, 0, chara->gravity);
-    }
-    else if(chara->on_ground == true){
-        if(key_state[ALLEGRO_KEY_SPACE]){
+    } else {
+        chara->gravity = 0; // 當角色在地面上時，重設重力
+        if (key_state[ALLEGRO_KEY_SPACE]) {
             chara->gravity = -7;
             _Character_update_position(self, 0, chara->gravity);
             chara->on_ground = false;
         }
     }
 
-    if (chara->state == STOP)
-    {
-        if (key_state[ALLEGRO_KEY_A])
-        {
+    if (chara->state == STOP) {
+        if (key_state[ALLEGRO_KEY_A]) {
             chara->dir = false;
             chara->state = MOVE;
-        }
-        else if (key_state[ALLEGRO_KEY_D])
-        {
+        } else if (key_state[ALLEGRO_KEY_D]) {
             chara->dir = true;
             chara->state = MOVE;
         }
-        else
-        {
-            chara->state = STOP;
-        }
-    }
-    else if (chara->state == MOVE)
-    {
-        if (key_state[ALLEGRO_KEY_A])
-        {
+    } else if (chara->state == MOVE) {
+        if (key_state[ALLEGRO_KEY_A]) {
             chara->dir = false;
             _Character_update_position(self, -4, 0);
-            chara->state = MOVE;
-        }
-        else if (key_state[ALLEGRO_KEY_D])
-        {
+        } else if (key_state[ALLEGRO_KEY_D]) {
             chara->dir = true;
             _Character_update_position(self, 4, 0);
-            chara->state = MOVE;
+        } else {
+            chara->state = STOP; // 如果沒有移動鍵按下，則回到 STOP 狀態
         }
-        if (chara->gif_status[chara->state]->done)
-            chara->state = STOP;
     }
 }
 void Character_draw(Elements *self)
@@ -167,57 +151,46 @@ void Character_interact_floor(Elements *self, Elements *floorele) {
     Character *chara = (Character *)(self->pDerivedObj);
     Floor *floorObj = (Floor *)(floorele->pDerivedObj);
 
-    int tile_x = chara->x;
-    int tile_y = chara->y + chara->height;
-    int tile_row = tile_y / TILE_SIZE;
-    int tile_col = tile_x / TILE_SIZE;
-    
-    int top_y = chara->y;
+    int bottom_y = chara->y + chara->height;
     int left_x = chara->x;
     int right_x = chara->x + chara->width;
     int center_x = chara->x + chara->width / 2;
-    int center_y = chara->y + chara->height / 2;
-    
-    int tile_id = floorObj->map_data[tile_row][tile_col];
 
-    TileType type = tile_type_table[tile_id];
-    //printf("%d\n", tile_id);
+    // 檢查角色正下方的 tile
+    int tile_row = bottom_y / TILE_SIZE;
+    int tile_col = center_x / TILE_SIZE;
 
-    if(check_tile_collision(floorObj, tile_x, tile_y)){
-        switch(type){
-            case TILE_TYPE_AIR:
-                chara->on_ground = false;
-                chara->climbing = false;
-                break;
-            case TILE_TYPE_CLIMABLE:
-            case TILE_TYPE_GROUND:
-                chara->y = tile_row * TILE_SIZE - chara->height;
-                chara->gravity = 0;
-                chara->on_ground = true;
-                chara->climbing = false;
-                break;
-            case TILE_TYPE_HURT:
-            default:
-                chara->on_ground = false;
-                break;
+    bool on_ground = false;
+    if (tile_row < TILE_ROW && tile_col < TILE_COL && tile_col >= 0) {
+        int tile_id = floorObj->map_data[tile_row][tile_col];
+        if (is_tile_walkable(tile_id)) {
+            // 將角色位置對齊到 tile 的頂部
+            chara->y = tile_row * TILE_SIZE - chara->height;
+            chara->gravity = 0;
+            on_ground = true;
         }
-    }else {
-        chara->on_ground = false;
     }
-    
-    //collision with left wall
-    if(check_tile_collision(floorObj, left_x, center_y)){
+    chara->on_ground = on_ground;
+    chara->climbing = false; // 簡化處理，預設為非攀爬狀態
+
+    // 牆壁碰撞偵測
+    // 左側
+    if (check_tile_collision(floorObj, left_x, chara->y + chara->height / 2)) {
         chara->x = (left_x / TILE_SIZE + 1) * TILE_SIZE;
     }
-    //collision with right wall
-    if (check_tile_collision(floorObj, right_x, center_y)) {
+    // 右側
+    if (check_tile_collision(floorObj, right_x, chara->y + chara->height / 2)) {
         chara->x = (right_x / TILE_SIZE) * TILE_SIZE - chara->width;
     }
-    //collision with celling
-    if (check_tile_collision(floorObj, center_x, top_y)) {
-        chara->y = (top_y / TILE_SIZE + 1) * TILE_SIZE;
+    // 天花板
+    if (check_tile_collision(floorObj, center_x, chara->y)) {
+        chara->y = (chara->y / TILE_SIZE + 1) * TILE_SIZE;
+        if (chara->gravity < 0) {
+            chara->gravity = 0; // 如果撞到天花板，則停止上升
+        }
     }
 }
+
 void Character_interact(Elements *self){
     ElementVec floors = _Get_label_elements(scene, Floor_L);
     if(floors.len > 0 && floors.arr[0] != NULL){
